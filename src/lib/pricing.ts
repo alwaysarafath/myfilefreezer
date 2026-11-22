@@ -39,6 +39,11 @@ export type RegionPricing = {
   egressPerGb: number;
   /** S3 Standard storage, USD per GB-month: what a restored copy is billed at while it exists. */
   standardStoragePerGbMonth: number;
+  /**
+   * Uploading into Deep Archive, USD per 1,000 requests. Each file costs one initiate, one
+   * complete, and one part per 16 MiB chunk. Data in is free; these requests are not.
+   */
+  uploadPer1000: { initiate: number; part: number; complete: number };
 };
 
 const r = (
@@ -48,6 +53,7 @@ const r = (
   requests: [bulk: number, standard: number],
   egress: number,
   standardStorage: number,
+  upload: [initiate: number, part: number, complete: number],
 ): RegionPricing => ({
   region,
   storagePerGbMonth: storage,
@@ -55,21 +61,23 @@ const r = (
   requestsPer1000: { bulk: requests[0], standard: requests[1] },
   egressPerGb: egress,
   standardStoragePerGbMonth: standardStorage,
+  uploadPer1000: { initiate: upload[0], part: upload[1], complete: upload[2] },
 });
 
 // prettier-ignore
 const REGIONS: Record<string, RegionPricing> = {
-  //                      storage   retrieval          requests /1000     egress  S3 Std
-  "us-east-1":      r("us-east-1",      0.00099, [0.0025, 0.02 ],  [0.025,  0.10  ], 0.09,  0.023),
-  "us-east-2":      r("us-east-2",      0.00099, [0.0025, 0.02 ],  [0.025,  0.10  ], 0.09,  0.023),
-  "us-west-2":      r("us-west-2",      0.00099, [0.0025, 0.02 ],  [0.025,  0.10  ], 0.09,  0.023),
-  "ca-central-1":   r("ca-central-1",   0.0018,  [0.005,  0.022],  [0.0275, 0.11  ], 0.09,  0.025),
-  "eu-west-1":      r("eu-west-1",      0.00099, [0.003,  0.02 ],  [0.025,  0.11  ], 0.09,  0.023),
-  "eu-west-2":      r("eu-west-2",      0.0018,  [0.005,  0.021],  [0.026,  0.106 ], 0.09,  0.024),
-  "eu-central-1":   r("eu-central-1",   0.0018,  [0.005,  0.024],  [0.03,   0.12  ], 0.09,  0.0245),
-  "ap-southeast-1": r("ap-southeast-1", 0.002,   [0.005,  0.024],  [0.03,   0.12  ], 0.12,  0.025),
-  "ap-southeast-2": r("ap-southeast-2", 0.002,   [0.005,  0.024],  [0.03,   0.12  ], 0.114, 0.025),
-  "ap-northeast-1": r("ap-northeast-1", 0.002,   [0.005,  0.022],  [0.025,  0.1142], 0.114, 0.025),
+  //                                    storage  retrieval         restore req /1000  egress  S3 Std  upload req /1000
+  "us-east-1":      r("us-east-1",      0.00099, [0.0025, 0.02 ], [0.025,  0.10  ], 0.09,   0.023,  [0.005,  0.005,  0.05 ]),
+  "us-east-2":      r("us-east-2",      0.00099, [0.0025, 0.02 ], [0.025,  0.10  ], 0.09,   0.023,  [0.005,  0.005,  0.05 ]),
+  "us-west-2":      r("us-west-2",      0.00099, [0.0025, 0.02 ], [0.025,  0.10  ], 0.09,   0.023,  [0.005,  0.005,  0.05 ]),
+  "ca-central-1":   r("ca-central-1",   0.0018,  [0.005,  0.022], [0.0275, 0.11  ], 0.09,   0.025,  [0.0055, 0.0055, 0.06 ]),
+  "eu-west-1":      r("eu-west-1",      0.00099, [0.003,  0.02 ], [0.025,  0.11  ], 0.09,   0.023,  [0.005,  0.005,  0.055]),
+  "eu-west-2":      r("eu-west-2",      0.0018,  [0.005,  0.021], [0.026,  0.106 ], 0.09,   0.024,  [0.0053, 0.0053, 0.06 ]),
+  "eu-central-1":   r("eu-central-1",   0.0018,  [0.005,  0.024], [0.03,   0.12  ], 0.09,   0.0245, [0.0054, 0.0054, 0.06 ]),
+  "ap-south-1":     r("ap-south-1",     0.002,   [0.005,  0.024], [0.03,   0.12  ], 0.1093, 0.025,  [0.005,  0.005,  0.07 ]),
+  "ap-southeast-1": r("ap-southeast-1", 0.002,   [0.005,  0.024], [0.03,   0.12  ], 0.12,   0.025,  [0.005,  0.005,  0.06 ]),
+  "ap-southeast-2": r("ap-southeast-2", 0.002,   [0.005,  0.024], [0.03,   0.12  ], 0.114,  0.025,  [0.0055, 0.0055, 0.06 ]),
+  "ap-northeast-1": r("ap-northeast-1", 0.002,   [0.005,  0.022], [0.025,  0.1142], 0.114,  0.025,  [0.0047, 0.0047, 0.065]),
 };
 
 const FALLBACK_REGION = "us-east-1";
@@ -119,4 +127,28 @@ export function restoredCopyPerDay(bytes: number, pricing: RegionPricing): numbe
 /** Ongoing Deep Archive storage bill for `bytes`, per month. */
 export function monthlyStorageCost(bytes: number, pricing: RegionPricing): number {
   return (bytes / BILLING_GB) * pricing.storagePerGbMonth;
+}
+
+/** Matches the upload route's minimum part size. */
+const PART_BYTES = 16 * 1024 ** 2;
+/** AWS's index overhead per Deep Archive object: 32 KB at Deep Archive rates, 8 KB at Standard. */
+const OVERHEAD_GDA_BYTES = 32 * 1024;
+const OVERHEAD_STANDARD_BYTES = 8 * 1024;
+
+/** One-time request cost of uploading `fileCount` files averaging `avgFileBytes` each. */
+export function uploadCost(fileCount: number, avgFileBytes: number, pricing: RegionPricing): number {
+  const parts = Math.max(1, Math.ceil(avgFileBytes / PART_BYTES));
+  const u = pricing.uploadPer1000;
+  return (fileCount / 1000) * (u.initiate + parts * u.part + u.complete);
+}
+
+/** Monthly storage including AWS's per-object overhead -- what the bill actually shows. */
+export function monthlyHoldCost(
+  bytes: number,
+  fileCount: number,
+  pricing: RegionPricing,
+): number {
+  const gdaGb = (bytes + fileCount * OVERHEAD_GDA_BYTES) / BILLING_GB;
+  const standardGb = (fileCount * OVERHEAD_STANDARD_BYTES) / BILLING_GB;
+  return gdaGb * pricing.storagePerGbMonth + standardGb * pricing.standardStoragePerGbMonth;
 }

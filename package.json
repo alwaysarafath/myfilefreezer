@@ -12,7 +12,8 @@
     "start": "next start -H 127.0.0.1",
     "lint": "eslint",
     "reindex": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning scripts/reindex-from-s3.mjs",
-    "setup-aws": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning scripts/setup-aws.mjs"
+    "setup-aws": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning scripts/setup-aws.mjs",
+    "cost-tables": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning scripts/cost-tables.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1175.0",

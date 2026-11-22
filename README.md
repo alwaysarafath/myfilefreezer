@@ -73,6 +73,119 @@ about ten times that.
 
 ---
 
+## The real cost
+
+What it costs to put photos in, keep them, and get **all** of them back, from the prices in
+[`src/lib/pricing.ts`](src/lib/pricing.ts).
+
+- **Save** — one-time request fees for uploading. Sending data in is free; Deep Archive
+  charges per file.
+- **Hold** — storage, including the ~40 KB AWS adds per file.
+- **Thaw** — retrieval + restore requests + download to the internet, for everything.
+
+<!-- cost-tables:start — regenerate with `npm run cost-tables` -->
+#### US East (N. Virginia) — `us-east-1`
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | $0.01 | <$0.01 | $0.01 | $0.10 | $0.13 |
+| 10 GB | 2,048 | $0.12 | $0.01 | $0.12 | $0.98 | $1.30 |
+| 100 GB | 20,480 | $1.23 | $0.10 | $1.24 | $9.76 | $13.05 |
+| 1 TB | 209,715 | $12.58 | $1.06 | $12.68 | $99.96 | $133.61 |
+
+<details><summary>Show in INR, AUD, GBP</summary>
+
+**INR**
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | ₹1.14 | ₹0.10 | ₹1.15 | ₹9.05 | ₹12.09 |
+| 10 GB | 2,048 | ₹11.39 | ₹0.96 | ₹11.48 | ₹90.47 | ₹120.93 |
+| 100 GB | 20,480 | ₹113.89 | ₹9.57 | ₹114.79 | ₹904.74 | ₹1,209.29 |
+| 1 TB | 209,715 | ₹1,166.18 | ₹97.95 | ₹1,175.44 | ₹9,264.56 | ₹12,383.11 |
+
+**AUD**
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | A$0.02 | <A$0.01 | A$0.02 | A$0.15 | A$0.20 |
+| 10 GB | 2,048 | A$0.18 | A$0.02 | A$0.19 | A$1.46 | A$1.96 |
+| 100 GB | 20,480 | A$1.84 | A$0.15 | A$1.86 | A$14.64 | A$19.57 |
+| 1 TB | 209,715 | A$18.88 | A$1.59 | A$19.03 | A$149.96 | A$200.44 |
+
+**GBP**
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | <£0.01 | <£0.01 | <£0.01 | £0.07 | £0.10 |
+| 10 GB | 2,048 | £0.09 | <£0.01 | £0.09 | £0.74 | £0.99 |
+| 100 GB | 20,480 | £0.94 | £0.08 | £0.94 | £7.44 | £9.94 |
+| 1 TB | 209,715 | £9.59 | £0.81 | £9.66 | £76.16 | £101.80 |
+
+</details>
+
+#### Asia Pacific (Mumbai) — `ap-south-1`
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | $0.02 | <$0.01 | $0.02 | $0.12 | $0.16 |
+| 10 GB | 2,048 | $0.16 | $0.02 | $0.25 | $1.20 | $1.58 |
+| 100 GB | 20,480 | $1.64 | $0.21 | $2.46 | $12.04 | $15.79 |
+| 1 TB | 209,715 | $16.78 | $2.10 | $25.21 | $123.33 | $161.67 |
+
+<details><summary>Show in INR, AUD, GBP</summary>
+
+**INR**
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | ₹1.52 | ₹0.19 | ₹2.28 | ₹11.16 | ₹14.63 |
+| 10 GB | 2,048 | ₹15.18 | ₹1.90 | ₹22.82 | ₹111.63 | ₹146.32 |
+| 100 GB | 20,480 | ₹151.85 | ₹19.01 | ₹228.17 | ₹1,116.27 | ₹1,463.19 |
+| 1 TB | 209,715 | ₹1,554.91 | ₹194.70 | ₹2,336.43 | ₹11,430.66 | ₹14,983.11 |
+
+**AUD**
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | A$0.02 | <A$0.01 | A$0.04 | A$0.18 | A$0.24 |
+| 10 GB | 2,048 | A$0.25 | A$0.03 | A$0.37 | A$1.81 | A$2.37 |
+| 100 GB | 20,480 | A$2.46 | A$0.31 | A$3.69 | A$18.07 | A$23.68 |
+| 1 TB | 209,715 | A$25.17 | A$3.15 | A$37.82 | A$185.03 | A$242.53 |
+
+**GBP**
+
+| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|--:|--:|--:|--:|--:|--:|
+| 1 GB | 205 | £0.01 | <£0.01 | £0.02 | £0.09 | £0.12 |
+| 10 GB | 2,048 | £0.12 | £0.02 | £0.19 | £0.92 | £1.20 |
+| 100 GB | 20,480 | £1.25 | £0.16 | £1.88 | £9.18 | £12.03 |
+| 1 TB | 209,715 | £12.78 | £1.60 | £19.21 | £93.97 | £123.18 |
+
+</details>
+
+<sub>Exchange rates: 1 USD = 92.68 INR, 1.5002 AUD, 0.76192 GBP (European Central Bank reference rates, 2026-11-20). Approximate; your card or bank will use its own rate.</sub>
+<!-- cost-tables:end -->
+
+Assumptions:
+
+- **Average file 5 MB** (phone photos), so 1 TB is about 210,000 files. Per-file fees
+  (Save, and the request part of Thaw) scale with the number of files, not their size —
+  video is cheaper per GB.
+- **Thaw is the worst case.** It ignores the 100 GB of free internet download AWS gives each
+  account per month, so a small thaw can cost less than shown.
+- **180-day minimum.** Every file is billed for at least 6 months of Hold, even if you
+  delete it sooner.
+- Tax not included.
+
+**Storing is cheap. Getting everything back is not. Thaw only what you need.**
+
+The app's **Thaw cost** page prices exactly the files you tick. Today you choose them by
+name; [thumbnail previews](https://github.com/alwaysarafath/myfilefreezer/issues/2) would
+make that easier and are open for anyone to build.
+
+---
+
 ## Costs in detail
 
 Figures are us-east-1 / Sydney (`ap-southeast-2`). The app carries a table for ten regions
@@ -82,7 +195,7 @@ in [`src/lib/pricing.ts`](src/lib/pricing.ts), taken from AWS's published price 
 |---|---|---|
 | Storage, per GB-month | $0.00099 | $0.002 |
 | Upload (data in) | free | free |
-| Upload requests | fractions of a cent per file | same |
+| Upload requests, per 1,000 files | $0.06 | $0.071 |
 | Retrieval — **Bulk** (~48 h), per GB | $0.0025 | $0.005 |
 | Retrieval — **Standard** (~12 h), per GB | $0.02 | $0.024 |
 | Restore requests, per 1,000 files | $0.025 Bulk / $0.10 Standard | $0.03 / $0.12 |
