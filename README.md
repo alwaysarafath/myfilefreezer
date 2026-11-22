@@ -84,83 +84,57 @@ What it costs to put photos in, keep them, and get **all** of them back, from th
 - **Thaw** — retrieval + restore requests + download to the internet, for everything.
 
 <!-- cost-tables:start — regenerate with `npm run cost-tables` -->
-#### US East (N. Virginia) — `us-east-1`
-
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | $0.01 | <$0.01 | $0.01 | $0.10 | $0.13 |
-| 10 GB | 2,048 | $0.12 | $0.01 | $0.12 | $0.98 | $1.30 |
-| 100 GB | 20,480 | $1.23 | $0.10 | $1.24 | $9.76 | $13.05 |
-| 1 TB | 209,715 | $12.58 | $1.06 | $12.68 | $99.96 | $133.61 |
-
-<details><summary>Show in INR, AUD, GBP</summary>
-
-**INR**
-
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | ₹1.14 | ₹0.10 | ₹1.15 | ₹9.05 | ₹12.09 |
-| 10 GB | 2,048 | ₹11.39 | ₹0.96 | ₹11.48 | ₹90.47 | ₹120.93 |
-| 100 GB | 20,480 | ₹113.89 | ₹9.57 | ₹114.79 | ₹904.74 | ₹1,209.29 |
-| 1 TB | 209,715 | ₹1,166.18 | ₹97.95 | ₹1,175.44 | ₹9,264.56 | ₹12,383.11 |
-
-**AUD**
-
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | A$0.02 | <A$0.01 | A$0.02 | A$0.15 | A$0.20 |
-| 10 GB | 2,048 | A$0.18 | A$0.02 | A$0.19 | A$1.46 | A$1.96 |
-| 100 GB | 20,480 | A$1.84 | A$0.15 | A$1.86 | A$14.64 | A$19.57 |
-| 1 TB | 209,715 | A$18.88 | A$1.59 | A$19.03 | A$149.96 | A$200.44 |
-
-**GBP**
-
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | <£0.01 | <£0.01 | <£0.01 | £0.07 | £0.10 |
-| 10 GB | 2,048 | £0.09 | <£0.01 | £0.09 | £0.74 | £0.99 |
-| 100 GB | 20,480 | £0.94 | £0.08 | £0.94 | £7.44 | £9.94 |
-| 1 TB | 209,715 | £9.59 | £0.81 | £9.66 | £76.16 | £101.80 |
-
-</details>
-
-#### Asia Pacific (Mumbai) — `ap-south-1`
-
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | $0.02 | <$0.01 | $0.02 | $0.12 | $0.16 |
-| 10 GB | 2,048 | $0.16 | $0.02 | $0.25 | $1.20 | $1.58 |
-| 100 GB | 20,480 | $1.64 | $0.21 | $2.46 | $12.04 | $15.79 |
-| 1 TB | 209,715 | $16.78 | $2.10 | $25.21 | $123.33 | $161.67 |
+| Stored | Region | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|---|--:|--:|--:|--:|--:|
+| **1 GB** · 205 files | US East `us-east-1` | $0.01 | <$0.01 | $0.01 | $0.10 | $0.13 |
+|  | Mumbai `ap-south-1` | $0.02 | <$0.01 | $0.02 | $0.12 | $0.16 |
+| **10 GB** · 2,048 files | US East `us-east-1` | $0.12 | $0.01 | $0.12 | $0.98 | $1.30 |
+|  | Mumbai `ap-south-1` | $0.16 | $0.02 | $0.25 | $1.20 | $1.58 |
+| **100 GB** · 20,480 files | US East `us-east-1` | $1.23 | $0.10 | $1.24 | $9.76 | $13.05 |
+|  | Mumbai `ap-south-1` | $1.64 | $0.21 | $2.46 | $12.04 | $15.79 |
+| **1 TB** · 209,715 files | US East `us-east-1` | $12.58 | $1.06 | $12.68 | $99.96 | $133.61 |
+|  | Mumbai `ap-south-1` | $16.78 | $2.10 | $25.21 | $123.33 | $161.67 |
 
 <details><summary>Show in INR, AUD, GBP</summary>
 
 **INR**
 
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | ₹1.52 | ₹0.19 | ₹2.28 | ₹11.16 | ₹14.63 |
-| 10 GB | 2,048 | ₹15.18 | ₹1.90 | ₹22.82 | ₹111.63 | ₹146.32 |
-| 100 GB | 20,480 | ₹151.85 | ₹19.01 | ₹228.17 | ₹1,116.27 | ₹1,463.19 |
-| 1 TB | 209,715 | ₹1,554.91 | ₹194.70 | ₹2,336.43 | ₹11,430.66 | ₹14,983.11 |
+| Stored | Region | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|---|--:|--:|--:|--:|--:|
+| **1 GB** · 205 files | US East `us-east-1` | ₹1.14 | ₹0.10 | ₹1.15 | ₹9.05 | ₹12.09 |
+|  | Mumbai `ap-south-1` | ₹1.52 | ₹0.19 | ₹2.28 | ₹11.16 | ₹14.63 |
+| **10 GB** · 2,048 files | US East `us-east-1` | ₹11.39 | ₹0.96 | ₹11.48 | ₹90.47 | ₹120.93 |
+|  | Mumbai `ap-south-1` | ₹15.18 | ₹1.90 | ₹22.82 | ₹111.63 | ₹146.32 |
+| **100 GB** · 20,480 files | US East `us-east-1` | ₹113.89 | ₹9.57 | ₹114.79 | ₹904.74 | ₹1,209.29 |
+|  | Mumbai `ap-south-1` | ₹151.85 | ₹19.01 | ₹228.17 | ₹1,116.27 | ₹1,463.19 |
+| **1 TB** · 209,715 files | US East `us-east-1` | ₹1,166.18 | ₹97.95 | ₹1,175.44 | ₹9,264.56 | ₹12,383.11 |
+|  | Mumbai `ap-south-1` | ₹1,554.91 | ₹194.70 | ₹2,336.43 | ₹11,430.66 | ₹14,983.11 |
 
 **AUD**
 
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | A$0.02 | <A$0.01 | A$0.04 | A$0.18 | A$0.24 |
-| 10 GB | 2,048 | A$0.25 | A$0.03 | A$0.37 | A$1.81 | A$2.37 |
-| 100 GB | 20,480 | A$2.46 | A$0.31 | A$3.69 | A$18.07 | A$23.68 |
-| 1 TB | 209,715 | A$25.17 | A$3.15 | A$37.82 | A$185.03 | A$242.53 |
+| Stored | Region | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|---|--:|--:|--:|--:|--:|
+| **1 GB** · 205 files | US East `us-east-1` | A$0.02 | <A$0.01 | A$0.02 | A$0.15 | A$0.20 |
+|  | Mumbai `ap-south-1` | A$0.02 | <A$0.01 | A$0.04 | A$0.18 | A$0.24 |
+| **10 GB** · 2,048 files | US East `us-east-1` | A$0.18 | A$0.02 | A$0.19 | A$1.46 | A$1.96 |
+|  | Mumbai `ap-south-1` | A$0.25 | A$0.03 | A$0.37 | A$1.81 | A$2.37 |
+| **100 GB** · 20,480 files | US East `us-east-1` | A$1.84 | A$0.15 | A$1.86 | A$14.64 | A$19.57 |
+|  | Mumbai `ap-south-1` | A$2.46 | A$0.31 | A$3.69 | A$18.07 | A$23.68 |
+| **1 TB** · 209,715 files | US East `us-east-1` | A$18.88 | A$1.59 | A$19.03 | A$149.96 | A$200.44 |
+|  | Mumbai `ap-south-1` | A$25.17 | A$3.15 | A$37.82 | A$185.03 | A$242.53 |
 
 **GBP**
 
-| Stored | Files | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
-|---|--:|--:|--:|--:|--:|--:|
-| 1 GB | 205 | £0.01 | <£0.01 | £0.02 | £0.09 | £0.12 |
-| 10 GB | 2,048 | £0.12 | £0.02 | £0.19 | £0.92 | £1.20 |
-| 100 GB | 20,480 | £1.25 | £0.16 | £1.88 | £9.18 | £12.03 |
-| 1 TB | 209,715 | £12.78 | £1.60 | £19.21 | £93.97 | £123.18 |
+| Stored | Region | Save (once) | Hold / month | Hold / year | Thaw Bulk (~48 h) | Thaw Standard (~12 h) |
+|---|---|--:|--:|--:|--:|--:|
+| **1 GB** · 205 files | US East `us-east-1` | <£0.01 | <£0.01 | <£0.01 | £0.07 | £0.10 |
+|  | Mumbai `ap-south-1` | £0.01 | <£0.01 | £0.02 | £0.09 | £0.12 |
+| **10 GB** · 2,048 files | US East `us-east-1` | £0.09 | <£0.01 | £0.09 | £0.74 | £0.99 |
+|  | Mumbai `ap-south-1` | £0.12 | £0.02 | £0.19 | £0.92 | £1.20 |
+| **100 GB** · 20,480 files | US East `us-east-1` | £0.94 | £0.08 | £0.94 | £7.44 | £9.94 |
+|  | Mumbai `ap-south-1` | £1.25 | £0.16 | £1.88 | £9.18 | £12.03 |
+| **1 TB** · 209,715 files | US East `us-east-1` | £9.59 | £0.81 | £9.66 | £76.16 | £101.80 |
+|  | Mumbai `ap-south-1` | £12.78 | £1.60 | £19.21 | £93.97 | £123.18 |
 
 </details>
 
