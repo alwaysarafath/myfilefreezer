@@ -251,7 +251,7 @@ the bucket, not the source of truth. Rebuild it:
 npm run reindex
 ```
 
-It lists `archive/` in your bucket and re-creates a row for every object. What it cannot
+It lists your bucket and re-creates a row for every object the app wrote. What it cannot
 bring back is anything only the index knew: original filenames come back in their sanitised
 S3-key form (`Beach day.jpg` → `Beach_day.jpg`), and content type is inferred from the
 extension.

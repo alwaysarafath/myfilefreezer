@@ -31,8 +31,9 @@ if (!bucket || !region) {
 
 const s3 = new S3Client({ region });
 
-// Same layout the upload route writes: archive/<uuid>/<sanitised-name>
-const KEY_PATTERN = /^archive\/([0-9a-f-]{36})\/(.+)$/i;
+// archive/<uuid>/<name>           -- what the upload route writes now
+// u/<user-uuid>/<uuid>/<name>      -- the hosted v1 layout; same file uuid, extra user segment
+const KEY_PATTERN = /^(?:archive|u\/[0-9a-f-]{36})\/([0-9a-f-]{36})\/(.+)$/i;
 
 const PHOTO = new Set(["jpg", "jpeg", "png", "gif", "webp", "heic", "heif", "tif", "tiff", "bmp", "dng", "raw", "cr2", "nef", "arw"]);
 const VIDEO = new Set(["mp4", "mov", "m4v", "avi", "mkv", "webm", "mpg", "mpeg", "3gp", "hevc"]);
@@ -46,13 +47,13 @@ let skipped = 0;
 const notDeepArchive = [];
 let token;
 
-console.log(`Reading s3://${bucket}/archive/ (${region}) ...`);
+console.log(`Reading s3://${bucket} (${region}) ...`);
 
 do {
   let page;
   try {
     page = await s3.send(
-      new ListObjectsV2Command({ Bucket: bucket, Prefix: "archive/", ContinuationToken: token }),
+      new ListObjectsV2Command({ Bucket: bucket, ContinuationToken: token }),
     );
   } catch (err) {
     if (err?.name === "AccessDenied" || err?.$metadata?.httpStatusCode === 403) {
