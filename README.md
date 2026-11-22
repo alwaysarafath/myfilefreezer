@@ -181,8 +181,10 @@ Sign-in stops anyone else on your network from reaching an app that can spend yo
 
 5. Copy the client ID and secret.
 
-**Skipping it:** if the machine is yours and nothing else can reach port 3000, you can set
-`DISABLE_AUTH=true` instead and skip this section. Don't do that on a shared network.
+**Skipping it:** the app only listens on `127.0.0.1`, so other devices on your network
+cannot reach it whether or not sign-in is on. If you are the only person using this
+computer, you can set `DISABLE_AUTH=true` and skip this section entirely. Keep sign-in if
+the computer is shared.
 
 ### 3. Run it
 
@@ -207,7 +209,8 @@ npm run dev
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | From the IAM user |
 | `DB_PATH` | Optional. Defaults to `./data/myfilefreezer.db` |
 
-Open http://localhost:3000.
+Open http://localhost:3000. The app listens on `127.0.0.1` only — reachable from this
+computer, not from anything else on your network.
 
 **Check your first upload in the S3 console** (object → Properties): storage class
 `Glacier Deep Archive`, encryption `SSE-S3`, a SHA-256 checksum present. The app checks the
@@ -242,14 +245,93 @@ data/myfilefreezer.db  (SQLite: the ledger)
 
 ---
 
+## Getting files back
+
+Files in Deep Archive cannot be downloaded directly. You ask AWS to **restore** a temporary
+copy, wait for it, then download that. The original stays in Deep Archive the whole time;
+the temporary copy expires by itself after the number of days you choose.
+
+The app does not do this for you, and its access key deliberately cannot. Use your own AWS
+login instead — the simplest is **AWS CloudShell** (the `>_` icon in the AWS console), which
+already has the AWS CLI and your permissions.
+
+**Check the cost first** on the app's **Thaw cost** page.
+
+### A few files: the S3 console
+
+1. Find the file's path. Each file sits in its own `archive/<id>/` folder and the console
+   search only matches the start of a path, so it is quickest to ask CloudShell:
+   `aws s3 ls s3://your-bucket-name/ --recursive | grep -i beach`. Then open that path
+   in S3 → your bucket.
+2. **Actions → Initiate restore**. Choose how many days to keep the copy, and **Bulk**
+   (~48 hours, cheapest) or **Standard** (~12 hours).
+3. Come back later. When the object's **Restoration status** says completed, use
+   **Download**.
+
+### Many files: the AWS CLI
+
+```bash
+BUCKET=your-bucket-name
+
+# 1. Find keys (photos are stored as archive/<id>/<name>)
+aws s3 ls "s3://$BUCKET/" --recursive | grep -i beach
+
+# 2. Request a restore. Days = how long the temporary copy is kept.
+aws s3api restore-object --bucket "$BUCKET" --key "archive/…/Beach_day.jpg" \
+  --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Bulk"}}'
+
+# 3. Check progress: ongoing-request="true" while waiting, "false" plus an expiry when ready
+aws s3api head-object --bucket "$BUCKET" --key "archive/…/Beach_day.jpg" --query Restore
+
+# 4. Download — or make a link to open on any device (valid for an hour):
+aws s3 cp "s3://$BUCKET/archive/…/Beach_day.jpg" .
+aws s3 presign "s3://$BUCKET/archive/…/Beach_day.jpg" --expires-in 3600
+```
+
+To restore everything, loop over the keys:
+
+```bash
+aws s3 ls "s3://$BUCKET/" --recursive | awk '{print $4}' | while read -r key; do
+  aws s3api restore-object --bucket "$BUCKET" --key "$key" \
+    --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Bulk"}}'
+done
+```
+
+For tens of thousands of files, AWS's S3 Batch Operations is the better tool. Full details:
+[Restoring an archived object](https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects.html).
+
+---
+
+## From your phone
+
+The app runs on your computer, so photos go phone → computer → app:
+
+- **iPhone to Mac:** AirDrop, or import into Photos and use **File → Export → Export
+  Unmodified Original** — that keeps the full-quality HEIC or video rather than a
+  compressed copy.
+- **Android or Windows:** USB cable, or download originals from your photo backup service.
+
+Then drag them onto the **Upload** page. Once a file shows *safe to delete*, it is safely
+in your bucket and verified, and you can remove it from the phone.
+
+Uploading straight from a phone's browser is not supported yet: browsers only allow the
+per-chunk checksums over HTTPS or on the computer itself, and the app does not serve HTTPS.
+
+---
+
 ## Recovery
 
 **Losing `data/myfilefreezer.db` does not lose your files.** The database is an index over
-the bucket, not the source of truth. Rebuild it:
+the bucket, not the source of truth. To rebuild it, **stop the app first**, then:
 
 ```bash
+rm -f data/myfilefreezer.db*     # the * matters: also removes the -wal and -shm files
 npm run reindex
+npm run dev
 ```
+
+Deleting the database while the app is running can lose the rebuilt rows: the running
+server keeps the old file open, and both end up writing to the same `-wal` file.
 
 It lists your bucket and re-creates a row for every object the app wrote. What it cannot
 bring back is anything only the index knew: original filenames come back in their sanitised

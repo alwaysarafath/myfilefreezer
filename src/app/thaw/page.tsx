@@ -1,6 +1,7 @@
 import AppShell from "@/components/AppShell";
 import ThawEstimator, { type ThawFile } from "@/components/ThawEstimator";
 import { listArchived } from "@/lib/db";
+import { formatDate } from "@/lib/format";
 import { PRICING_LAST_CHECKED, PRICING_URL, pricingFor } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export default async function ThawPage() {
     id: f.id,
     name: f.original_name,
     size: Number(f.size_bytes),
-    archivedAt: f.archived_at ?? f.created_at,
+    archivedLabel: formatDate(f.archived_at ?? f.created_at),
   }));
 
   return (

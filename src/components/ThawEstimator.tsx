@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { formatBytes, formatDate, formatUsd } from "@/lib/format";
+import { formatBytes, formatUsd } from "@/lib/format";
 import {
   TIERS,
   estimateThaw,
@@ -14,7 +14,11 @@ export type ThawFile = {
   id: string;
   name: string;
   size: number;
-  archivedAt: string;
+  /**
+   * Pre-formatted on the server. Formatting here would render once with the server's
+   * locale and again with the browser's, and the two disagree (a hydration mismatch).
+   */
+  archivedLabel: string;
 };
 
 const TIER_ORDER: Tier[] = ["bulk", "standard"];
@@ -114,7 +118,7 @@ export default function ThawEstimator({
                     </td>
                     <td className="max-w-[16rem] truncate px-3 py-2">{file.name}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-xs opacity-60">
-                      {formatDate(file.archivedAt)}
+                      {file.archivedLabel}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-right tabular-nums opacity-80">
                       {formatBytes(file.size)}

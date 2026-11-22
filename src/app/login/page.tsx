@@ -43,7 +43,7 @@ export default async function LoginPage({
         )}
 
         <p className="mt-8 text-xs opacity-40">
-          Running only on your own machine? Set DISABLE_AUTH=true and skip this entirely.
+          The only user of this computer? Set DISABLE_AUTH=true and skip this entirely.
         </p>
       </div>
     </main>
