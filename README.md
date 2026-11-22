@@ -12,6 +12,10 @@ already on your phone, the wedding video, the old hard drive — not for files y
 
 MIT licensed. Fork it, change it, run it.
 
+![The Files page: every archived photo and video, with totals by type, all verified](docs/app-files.png)
+
+![The Thaw cost page: select files to see what restoring and downloading them would cost, Bulk vs Standard](docs/app-thaw-cost.png)
+
 ---
 
 ## Why
@@ -217,6 +221,8 @@ computer, not from anything else on your network.
 same things itself before calling a file *verified*, but it is worth seeing once with your
 own eyes.
 
+![An uploaded file in the S3 console, storage class Glacier Deep Archive](docs/s3-object-deep-archive.png)
+
 ---
 
 ## How it works
@@ -267,6 +273,8 @@ already has the AWS CLI and your permissions.
    (~48 hours, cheapest) or **Standard** (~12 hours).
 3. Come back later. When the object's **Restoration status** says completed, use
    **Download**.
+
+![The S3 console's Initiate restore form: days to keep the copy, and Bulk or Standard tier](docs/s3-initiate-restore.png)
 
 ### Many files: the AWS CLI
 
