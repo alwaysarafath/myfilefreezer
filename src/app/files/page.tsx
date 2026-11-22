@@ -111,7 +111,8 @@ export default async function FilesPage() {
           <Link href="/thaw" className="underline">
             estimate it first
           </Link>
-          .
+          . Thaw is the worst case. It ignores the 100 GB of free internet download AWS gives
+          each account per month, so a small thaw can cost less than shown.
         </p>
       </main>
     </AppShell>

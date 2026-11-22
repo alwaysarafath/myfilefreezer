@@ -183,8 +183,9 @@ export default function ThawEstimator({
 
         <div className="mt-4 space-y-2 text-xs opacity-50">
           <p>
-            Transfer out is usually the biggest line. The first 100 GB a month across your
-            whole AWS account is free, so a small thaw may cost less than shown.
+            Transfer out is usually the biggest line. Thaw is the worst case. It ignores the
+            100 GB of free internet download AWS gives each account per month, so a small
+            thaw can cost less than shown.
           </p>
           <p>
             While a restored copy is available it is billed as S3 Standard storage — about{" "}

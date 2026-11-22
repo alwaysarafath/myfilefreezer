@@ -68,6 +68,8 @@ about ten times that.
 - **Getting files back costs money and takes time.** 12 hours (Standard) or 48 hours (Bulk),
   plus a retrieval fee, plus — usually the biggest part — data transfer out to download it.
   The app's **Thaw cost** page tells you the full figure before you commit to anything.
+  Thaw is the worst case. It ignores the 100 GB of free internet download AWS gives each
+  account per month, so a small thaw can cost less than shown.
 - **180-day minimum.** Every object is billed for at least 180 days, even if deleted sooner.
 - **Those services sync, preview and share.** This does none of that. It is a vault.
 
@@ -176,7 +178,10 @@ in [`src/lib/pricing.ts`](src/lib/pricing.ts), taken from AWS's published price 
 | Data transfer out to the internet, per GB | $0.09 | $0.114 |
 
 - **Egress dominates.** Thawing 100 GB in Bulk from us-east-1 costs $0.25 in retrieval
-  fees and about $9 to download. The first 100 GB a month across your AWS account is free.
+  fees and about $9 to download. Thaw is the worst case. It ignores the 100 GB of free
+  internet download AWS gives each account per month, so a small thaw can cost less than
+  shown — if nothing else in your account used that allowance this month, this example's
+  download would be free.
 - **180-day minimum storage charge** per object.
 - **~40 KB overhead per object** — 32 KB billed at Deep Archive rates and 8 KB at S3
   Standard rates, for the index AWS keeps. About 1% on a 5 MB photo; irrelevant on video.
@@ -378,7 +383,9 @@ The app does not do this for you, and its access key deliberately cannot. Use yo
 login instead — the simplest is **AWS CloudShell** (the `>_` icon in the AWS console), which
 already has the AWS CLI and your permissions.
 
-**Check the cost first** on the app's **Thaw cost** page.
+**Check the cost first** on the app's **Thaw cost** page. Thaw is the worst case. It
+ignores the 100 GB of free internet download AWS gives each account per month, so a small
+thaw can cost less than shown.
 
 ### A few files: the S3 console
 
