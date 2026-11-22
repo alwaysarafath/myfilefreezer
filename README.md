@@ -18,6 +18,36 @@ MIT licensed. Fork it, change it, run it.
 
 ---
 
+## Quick start
+
+> **Experimental, not yet tested against a real AWS account. Review before running.** The
+> manual [Setup](#setup) section below is the tested path.
+
+**For a personal laptop only** — one person, one computer. It skips Google sign-in; the app
+only accepts connections from this computer, but anyone using it can reach the app. Sign-in
+is optional and covered in [Setup](#2-google-sign-in).
+
+You need an AWS account, Node.js 22.18+, and the
+[AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+signed in with an admin identity (`aws login` in a recent CLI, or `aws configure`). With
+the CLI already set up this takes about 10 minutes; installing it adds 10–20 more the first
+time.
+
+```bash
+npm install
+npm run setup-aws                          # bucket, IAM user, $5 budget alert, .env.local
+echo 'DISABLE_AUTH=true' >> .env.local     # skip Google sign-in
+npm run dev                                # open http://localhost:3000
+```
+
+`setup-aws` shows which AWS account it will use and asks before changing anything. It
+creates the bucket (public access blocked, SSE-S3 encryption, CORS, the abort-incomplete-
+uploads rule), an IAM user that can upload but cannot delete or restore, and a $5/month
+budget that emails you. It writes the keys into `.env.local` without printing the secret.
+Running it again skips whatever already exists.
+
+---
+
 ## Why
 
 Deep Archive costs about **$1 per TB per month** (us-east-1). Consumer cloud storage costs
@@ -97,7 +127,7 @@ Bucket → Permissions → Cross-origin resource sharing:
 ```json
 [
   {
-    "AllowedOrigins": ["http://localhost:3000"],
+    "AllowedOrigins": ["http://localhost:3000", "http://127.0.0.1:3000"],
     "AllowedMethods": ["PUT", "POST", "GET", "HEAD"],
     "AllowedHeaders": ["*"],
     "ExposeHeaders": ["ETag", "x-amz-checksum-sha256"]
